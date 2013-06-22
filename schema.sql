@@ -38,7 +38,7 @@ CREATE TABLE stops
 
 CREATE TABLE routes
 (
-  agency_id         text NULL REFERENCES agency(agency_id) ON DELETE CASCADE,
+  agency_id         text NULL,
   route_short_name  text NOT NULL,
   route_long_name   text NOT NULL,
   route_desc        text NULL,
@@ -75,14 +75,14 @@ CREATE TABLE shapes
 
 CREATE TABLE trips
 (
-  route_id          text NOT NULL REFERENCES routes ON DELETE CASCADE,
-  service_id        text NOT NULL REFERENCES calendar,
+  route_id          text NOT NULL,
+  service_id        text NOT NULL,
   trip_short_name   text NULL,
   trip_headsign     text NULL,
   route_short_name  text NULL,
   direction_id      boolean NULL,
   block_id          text NULL,
-  shape_id          text NULL REFERENCES shapes,
+  shape_id          text NULL,
   wheelchair_accessible text NULL,
   trip_bikes_allowed text NULL,
   trip_id           text NOT NULL PRIMARY KEY
@@ -90,9 +90,9 @@ CREATE TABLE trips
 
 CREATE TABLE stop_times
 (
-  trip_id           text NOT NULL REFERENCES trips ON DELETE CASCADE,
+  trip_id           text NOT NULL,
   stop_sequence     integer NOT NULL,
-  stop_id           text NOT NULL REFERENCES stops ON DELETE CASCADE,
+  stop_id           text NOT NULL,
   arrival_time      interval NOT NULL,
   departure_time    interval NOT NULL,
   stop_headsign     text NULL,
@@ -104,7 +104,7 @@ CREATE TABLE stop_times
 
 CREATE TABLE frequencies
 (
-  trip_id           text NOT NULL REFERENCES trips ON DELETE CASCADE,
+  trip_id           text NOT NULL,
   start_time        interval NOT NULL,
   end_time          interval NOT NULL,
   headway_secs      integer NOT NULL,
@@ -113,8 +113,8 @@ CREATE TABLE frequencies
 
 CREATE TABLE transfers
 (
-    from_stop_id  text NOT NULL REFERENCES stops ON DELETE CASCADE,
-    to_stop_id    text NOT NULL REFERENCES stops ON DELETE CASCADE,
+    from_stop_id  text NOT NULL,
+    to_stop_id    text NOT NULL,
     transfer_type   integer NOT NULL
 );
 
