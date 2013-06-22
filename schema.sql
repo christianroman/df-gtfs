@@ -2,10 +2,10 @@ DROP SCHEMA IF EXISTS gtfs CASCADE;
 CREATE SCHEMA gtfs;
 
 DROP DOMAIN IF EXISTS wgs84_lat CASCADE;
-CREATE DOMAIN wgs84_lon AS DOUBLE PRECISION CHECK(VALUE >= -180 AND VALUE <= 180);
+CREATE DOMAIN wgs84_lat AS DOUBLE PRECISION CHECK(VALUE >= -90 AND VALUE <= 90);
 
 DROP DOMAIN IF EXISTS wgs84_lon CASCADE;
-CREATE DOMAIN wgs84_lat AS DOUBLE PRECISION CHECK(VALUE >= -90 AND VALUE <= 90);
+CREATE DOMAIN wgs84_lon AS DOUBLE PRECISION CHECK(VALUE >= -180 AND VALUE <= 180);
 
 DROP DOMAIN IF EXISTS gtfstime CASCADE;
 CREATE DOMAIN gtfstime AS text CHECK(VALUE ~ '^[0-9]?[0-9]:[0-5][0-9]:[0-5][0-9]$');
@@ -33,7 +33,7 @@ CREATE TABLE stops
   location_type     boolean NULL,
   parent_station    text NULL,
   wheelchair_boarding text NULL,
-  stop_direction	text NULL
+  stop_direction  text NULL
 );
 
 CREATE TABLE routes
@@ -83,7 +83,7 @@ CREATE TABLE trips
   direction_id      boolean NULL,
   block_id          text NULL,
   shape_id          text NULL REFERENCES shapes,
-  route_short_name	text NULL,
+  route_short_name  text NULL,
   wheelchair_accessible text NULL,
   trip_bikes_allowed text NULL
 );
@@ -99,7 +99,7 @@ CREATE TABLE stop_times
   pickup_type       integer NULL CHECK(pickup_type >= 0 and pickup_type <=3),
   drop_off_type     integer NULL CHECK(drop_off_type >= 0 and drop_off_type <=3),
   shape_dist_traveled double precision NULL,
-  route_short_name	text NULL
+  route_short_name  text NULL
 );
 
 CREATE TABLE frequencies
@@ -108,22 +108,12 @@ CREATE TABLE frequencies
   start_time        interval NOT NULL,
   end_time          interval NOT NULL,
   headway_secs      integer NOT NULL,
-  exact_times		text NULL
+  exact_times   text NULL
 );
 
 CREATE TABLE transfers
 (
-    from_stop_id 	text NOT NULL REFERENCES stops ON DELETE CASCADE,
-    to_stop_id 		text NOT NULL REFERENCES stops ON DELETE CASCADE,
-    transfer_type 	integer NOT NULL
+    from_stop_id  text NOT NULL REFERENCES stops ON DELETE CASCADE,
+    to_stop_id    text NOT NULL REFERENCES stops ON DELETE CASCADE,
+    transfer_type   integer NOT NULL
 );
-
-\copy gtfs.agency from './gtfs/agency.txt' with csv header
-\copy gtfs.stops from './gtfs/stops.txt' with csv header
-\copy gtfs.routes from './gtfs/routes.txt' with csv header
-\copy gtfs.calendar from './gtfs/calendar.txt' with csv header
-\copy gtfs.shapes from './gtfs/shapes.txt' with csv header
-\copy gtfs.trips from './gtfs/trips.txt' with csv header
-\copy gtfs.stop_times from './gtfs/stop_times.txt' with csv header
-\copy gtfs.frequencies from './gtfs/frequencies.txt' with csv header
-\copy gtfs.transfers from './gtfs/transfers.txt' with csv header
