@@ -1,16 +1,16 @@
-DROP SCHEMA IF EXISTS gtfs CASCADE;
-CREATE SCHEMA gtfs;
+#DROP SCHEMA IF EXISTS gtfs CASCADE;
+#CREATE SCHEMA gtfs;
 
 DROP DOMAIN IF EXISTS wgs84_lat CASCADE;
-CREATE DOMAIN gtfs.wgs84_lat AS DOUBLE PRECISION CHECK(VALUE >= -90 AND VALUE <= 90);
+CREATE DOMAIN wgs84_lat AS DOUBLE PRECISION CHECK(VALUE >= -90 AND VALUE <= 90);
 
 DROP DOMAIN IF EXISTS wgs84_lon CASCADE;
-CREATE DOMAIN gtfs.wgs84_lon AS DOUBLE PRECISION CHECK(VALUE >= -180 AND VALUE <= 180);
+CREATE DOMAIN wgs84_lon AS DOUBLE PRECISION CHECK(VALUE >= -180 AND VALUE <= 180);
 
 DROP DOMAIN IF EXISTS gtfstime CASCADE;
-CREATE DOMAIN gtfs.gtfstime AS text CHECK(VALUE ~ '^[0-9]?[0-9]:[0-5][0-9]:[0-5][0-9]$');
+CREATE DOMAIN gtfstime AS text CHECK(VALUE ~ '^[0-9]?[0-9]:[0-5][0-9]:[0-5][0-9]$');
 
-CREATE TABLE gtfs.agency
+CREATE TABLE agency
 (
   agency_id         text UNIQUE NULL,
   agency_name       text NOT NULL,
@@ -20,7 +20,7 @@ CREATE TABLE gtfs.agency
   agency_phone      text NULL
 );
 
-CREATE TABLE gtfs.stops
+CREATE TABLE stops
 (
   stop_id           text PRIMARY KEY,
   stop_code         text UNIQUE NULL,
@@ -36,7 +36,7 @@ CREATE TABLE gtfs.stops
   stop_direction  text NULL
 );
 
-CREATE TABLE gtfs.routes
+CREATE TABLE routes
 (
   route_id          text PRIMARY KEY,
   agency_id         text NULL REFERENCES agency(agency_id) ON DELETE CASCADE,
@@ -50,7 +50,7 @@ CREATE TABLE gtfs.routes
   route_bikes_allowed text NULL
 );
 
-CREATE TABLE gtfs.calendar
+CREATE TABLE calendar
 (
   service_id        text PRIMARY KEY,
   monday            boolean NOT NULL,
@@ -64,7 +64,7 @@ CREATE TABLE gtfs.calendar
   end_date          numeric(8) NOT NULL
 );
 
-CREATE TABLE gtfs.shapes
+CREATE TABLE shapes
 (
   shape_id          text PRIMARY KEY,
   shape_pt_lat      wgs84_lat NOT NULL,
@@ -73,7 +73,7 @@ CREATE TABLE gtfs.shapes
   shape_dist_traveled double precision NULL
 );
 
-CREATE TABLE gtfs.trips
+CREATE TABLE trips
 (
   route_id          text NOT NULL REFERENCES routes ON DELETE CASCADE,
   service_id        text NOT NULL REFERENCES calendar,
@@ -88,7 +88,7 @@ CREATE TABLE gtfs.trips
   trip_bikes_allowed text NULL
 );
 
-CREATE TABLE gtfs.stop_times
+CREATE TABLE stop_times
 (
   trip_id           text NOT NULL REFERENCES trips ON DELETE CASCADE,
   arrival_time      interval NOT NULL,
@@ -102,7 +102,7 @@ CREATE TABLE gtfs.stop_times
   route_short_name  text NULL
 );
 
-CREATE TABLE gtfs.frequencies
+CREATE TABLE frequencies
 (
   trip_id           text NOT NULL REFERENCES trips ON DELETE CASCADE,
   start_time        interval NOT NULL,
@@ -111,19 +111,19 @@ CREATE TABLE gtfs.frequencies
   exact_times   text NULL
 );
 
-CREATE TABLE gtfs.transfers
+CREATE TABLE transfers
 (
     from_stop_id  text NOT NULL REFERENCES stops ON DELETE CASCADE,
     to_stop_id    text NOT NULL REFERENCES stops ON DELETE CASCADE,
     transfer_type   integer NOT NULL
 );
 
-\copy gtfs.agency from './gtfs/agency.txt' with csv header
-\copy gtfs.stops from './gtfs/stops.txt' with csv header
-\copy gtfs.routes from './gtfs/routes.txt' with csv header
-\copy gtfs.calendar from './gtfs/calendar.txt' with csv header
-\copy gtfs.shapes from './gtfs/shapes.txt' with csv header
-\copy gtfs.trips from './gtfs/trips.txt' with csv header
-\copy gtfs.stop_times from './gtfs/stop_times.txt' with csv header
-\copy gtfs.frequencies from './gtfs/frequencies.txt' with csv header
-\copy gtfs.transfers from './gtfs/transfers.txt' with csv header
+\copy agency from './gtfs/agency.txt' with csv header
+\copy stops from './gtfs/stops.txt' with csv header
+\copy routes from './gtfs/routes.txt' with csv header
+\copy calendar from './gtfs/calendar.txt' with csv header
+\copy shapes from './gtfs/shapes.txt' with csv header
+\copy trips from './gtfs/trips.txt' with csv header
+\copy stop_times from './gtfs/stop_times.txt' with csv header
+\copy frequencies from './gtfs/frequencies.txt' with csv header
+\copy transfers from './gtfs/transfers.txt' with csv header
