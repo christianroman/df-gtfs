@@ -10,8 +10,6 @@ CREATE DOMAIN gtfs.wgs84_lon AS DOUBLE PRECISION CHECK(VALUE >= -180 AND VALUE <
 DROP DOMAIN IF EXISTS gtfstime CASCADE;
 CREATE DOMAIN gtfs.gtfstime AS text CHECK(VALUE ~ '^[0-9]?[0-9]:[0-5][0-9]:[0-5][0-9]$');
 
-DROP TABLE IF EXISTS gtfs.agency CASCADE;
-
 CREATE TABLE gtfs.agency
 (
   agency_id         text UNIQUE NULL,
@@ -21,8 +19,6 @@ CREATE TABLE gtfs.agency
   agency_lang       text NULL,
   agency_phone      text NULL
 );
-
-DROP TABLE IF EXISTS gtfs.stops CASCADE;
 
 CREATE TABLE gtfs.stops
 (
@@ -40,8 +36,6 @@ CREATE TABLE gtfs.stops
   stop_direction  text NULL
 );
 
-DROP TABLE IF EXISTS gtfs.routes CASCADE;
-
 CREATE TABLE gtfs.routes
 (
   route_id          text PRIMARY KEY,
@@ -55,8 +49,6 @@ CREATE TABLE gtfs.routes
   route_text_color  text NULL,
   route_bikes_allowed text NULL
 );
-
-DROP TABLE IF EXISTS gtfs.calendar CASCADE;
 
 CREATE TABLE gtfs.calendar
 (
@@ -72,8 +64,6 @@ CREATE TABLE gtfs.calendar
   end_date          numeric(8) NOT NULL
 );
 
-DROP TABLE IF EXISTS gtfs.shapes CASCADE;
-
 CREATE TABLE gtfs.shapes
 (
   shape_id          text PRIMARY KEY,
@@ -82,8 +72,6 @@ CREATE TABLE gtfs.shapes
   shape_pt_sequence integer NOT NULL,
   shape_dist_traveled double precision NULL
 );
-
-DROP TABLE IF EXISTS gtfs.trips CASCADE;
 
 CREATE TABLE gtfs.trips
 (
@@ -100,8 +88,6 @@ CREATE TABLE gtfs.trips
   trip_bikes_allowed text NULL
 );
 
-DROP TABLE IF EXISTS gtfs.stop_times CASCADE;
-
 CREATE TABLE gtfs.stop_times
 (
   trip_id           text NOT NULL REFERENCES trips ON DELETE CASCADE,
@@ -116,8 +102,6 @@ CREATE TABLE gtfs.stop_times
   route_short_name  text NULL
 );
 
-DROP TABLE IF EXISTS gtfs.frequencies CASCADE;
-
 CREATE TABLE gtfs.frequencies
 (
   trip_id           text NOT NULL REFERENCES trips ON DELETE CASCADE,
@@ -126,8 +110,6 @@ CREATE TABLE gtfs.frequencies
   headway_secs      integer NOT NULL,
   exact_times   text NULL
 );
-
-DROP TABLE IF EXISTS gtfs.transfers CASCADE;
 
 CREATE TABLE gtfs.transfers
 (
