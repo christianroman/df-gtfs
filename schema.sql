@@ -66,7 +66,7 @@ CREATE TABLE calendar
 
 CREATE TABLE shapes
 (
-  shape_id          text PRIMARY KEY,
+  shape_id          text, #PRIMARY KEY,
   shape_pt_sequence integer NOT NULL,
   shape_dist_traveled double precision NULL,
   shape_pt_lat      wgs84_lat NOT NULL,
