@@ -117,3 +117,13 @@ CREATE TABLE transfers
     to_stop_id    text NOT NULL REFERENCES stops ON DELETE CASCADE,
     transfer_type   integer NOT NULL
 );
+
+\copy gtfs.agency from './gtfs/agency.txt' with csv header
+\copy gtfs.stops from './gtfs/stops.txt' with csv header
+\copy gtfs.routes from './gtfs/routes.txt' with csv header
+\copy gtfs.calendar from './gtfs/calendar.txt' with csv header
+\copy gtfs.shapes from './gtfs/shapes.txt' with csv header
+\copy gtfs.trips from './gtfs/trips.txt' with csv header
+\copy gtfs.stop_times from './gtfs/stop_times.txt' with csv header
+\copy gtfs.frequencies from './gtfs/frequencies.txt' with csv header
+\copy gtfs.transfers from './gtfs/transfers.txt' with csv header
